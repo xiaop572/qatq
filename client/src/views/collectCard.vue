@@ -6,9 +6,7 @@
       活动倒计时：
       <span>20</span>
       天
-      <span>12</span>时
-      <span>51</span>分
-      <span>38</span>秒
+      <span>12</span>时 <span>51</span>分 <span>38</span>秒
     </div>
     <div class="rule">
       <img src="../assets/ruleBg.png" alt class="ruleBg" />
@@ -18,45 +16,15 @@
     </div>
     <div class="gather-card-box">
       <div class="card-box">
-        <div class="card-item">
-          <img src="../assets/1_1.jpg" alt />
-          <span>0</span>
-        </div>
-        <div class="card-item">
-          <img src="../assets/1_1.jpg" alt />
-          <span>0</span>
-        </div>
-        <div class="card-item">
-          <img src="../assets/1_1.jpg" alt />
-          <span>0</span>
-        </div>
-        <div class="card-item">
-          <img src="../assets/1_1.jpg" alt />
-          <span>0</span>
-        </div>
-        <div class="card-item">
-          <img src="../assets/1_1.jpg" alt />
-          <span>0</span>
-        </div>
-        <div class="card-item">
-          <img src="../assets/1_1.jpg" alt />
-          <span>0</span>
-        </div>
-        <div class="card-item">
-          <img src="../assets/1_1.jpg" alt />
-          <span>0</span>
-        </div>
-        <div class="card-item">
-          <img src="../assets/1_1.jpg" alt />
-          <span>0</span>
-        </div>
-        <div class="card-item">
-          <img src="../assets/1_1.jpg" alt />
-          <span>0</span>
+        <div class="card-item" v-for="(item, index) in cardList" :key="index">
+          <img :src="item.src" alt :class="{succuess:item.type==='success'}"/>
+          <span>{{ item.number }}</span>
         </div>
       </div>
       <div class="gather-btn-list">
-        <div class="gather-btn" @click="getCard">开始抽卡 x{{drawNumber}}</div>
+        <div class="gather-btn" @click="getCard">
+          开始抽卡 x{{ drawNumber }}
+        </div>
         <div class="gather-btn">求助好友</div>
       </div>
       <p class="person-count">
@@ -76,6 +44,7 @@
   </div>
 </template>
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
@@ -83,6 +52,7 @@ export default {
       getCardDis: false,
       cardShow: false,
       cardSrc: "",
+      cardList: [],
     };
   },
   methods: {
@@ -105,8 +75,54 @@ export default {
       } else {
         document.body.style.overflow = "auto";
       }
-    }
-  }
+    },
+    getCardList() {
+      let user = localStorage.getItem("userInfo");
+      const userData = JSON.parse(user);
+      axios
+        .post("/api/card/getCardList", {
+          openid: userData.openid,
+        })
+        .then((res) => {
+          if (res.data.code === "200") {
+            this.cardList = [];
+            const data = res.data.data;
+            let state = true;
+            for (let item in data) {
+              if (data[item] === 0) {
+                state = false;
+              }
+            }
+            if (state) {
+              this.cardList.push({
+                src: require(`@/assets/cardSuccess.jpg`),
+                number: 1,
+                type:'success'
+              });
+              return true;
+            }
+            let i = 1;
+            for (let item in data) {
+              if (data[item] > 0) {
+                this.cardList.push({
+                  src: require(`@/assets/${i}.jpg`),
+                  number: data[item],
+                });
+              } else {
+                this.cardList.push({
+                  src: require(`@/assets/${i}_${i}.jpg`),
+                  number: 0,
+                });
+              }
+              i++;
+            }
+          }
+        });
+    },
+  },
+  mounted() {
+    this.getCardList();
+  },
 };
 </script>
 <style lang="less" scoped>
@@ -286,7 +302,7 @@ export default {
       margin: auto;
       width: 4rem;
       height: 6rem;
-      background: url('../assets/drawCardBg.png') no-repeat;
+      background: url("../assets/drawCardBg.png") no-repeat;
       background-size: cover;
       animation: rotatePeople 1.5s ease 2;
       border-radius: 0.2rem;
@@ -324,6 +340,9 @@ export default {
       right: 0;
       margin: auto;
     }
+  }
+  .succuess{
+    width: 1.8rem !important;
   }
   background-color: #fbd8c8;
   background-image: url("../assets/cardBg.png");

@@ -2,11 +2,12 @@ const express = require("express");
 const router = express.Router();
 const request = require('request');
 const wxUserSer = require('../../services/wxUserService')
+const cardSer=require('../../services/cardService')
 let AppID = "wx94dd8f9eaa2710a8"
 let AppSecret = "369e9af70eb0a3caf88ec0d42ecf91e4"
 router.get('/login', async (req, res) => {
     var routerPath = 'api/wx/get_wx_access_token';
-    var return_uri = 'http%3A%2F%2F7weyz5.natappfree.cc%2F' + routerPath;
+    var return_uri = 'http%3A%2F%2Flpc.natapp1.cc%2F' + routerPath;
     var scope = 'snsapi_userinfo';
     res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + AppID + '&redirect_uri=' + return_uri + '&response_type=code&scope=' + scope + '&state=STATE#wechat_redirect')
 })
@@ -34,9 +35,10 @@ router.get('/get_wx_access_token', function (req, res, next) {
                             console.log(ins)
                             if (!ins) {
                                 wxUserSer.addUser(userinfo)
+                                cardSer.add(userinfo)
                             }
 
-                            res.redirect(301, 'http://7weyz5.natappfree.cc/?openid=' + userinfo.openid);
+                            res.redirect(301, 'http://lpc.natapp1.cc/?openid=' + userinfo.openid);
                             res.end()
                             //headimgurl  nickname province openid
 
@@ -52,6 +54,13 @@ router.get('/get_wx_access_token', function (req, res, next) {
     );
 })
 router.post('/getUserInfo', async (req, res) => {
+    if (!req.body.openid) {
+        res.send({
+            code: '500',
+            msg: "openid不存在"
+        })
+        return false;
+    }
     const ins = await wxUserSer.getUser(req.body.openid)
     res.send(ins)
 })

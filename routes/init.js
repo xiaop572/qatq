@@ -12,6 +12,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use('/api/wx',require('./api/wx'));
 app.use('/api/question',require('./api/question'));
+app.use('/api/card',require('./api/card'));
+app.use(require("./errorMiddleware"));
 const port = 5008;
 app.listen(port, () => {
   console.log(`server listen on ${port}`);

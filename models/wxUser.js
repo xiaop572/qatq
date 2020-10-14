@@ -31,6 +31,15 @@ module.exports = sequelize.define(
         headimgurl: {
             type: DataTypes.STRING,
             allowNull: false
+        },
+        loginTime:{
+            type:DataTypes.STRING,
+            allowNull:false
+        },
+        smokeCardNumber:{
+            type:DataTypes.INTEGER,
+            allowNull:false,
+            defaultValue:0
         }
     }, {
         createdAt: false,

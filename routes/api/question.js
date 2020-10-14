@@ -17,8 +17,24 @@ router.post('/add', async (req, res) => {
     }
 })
 router.post('/get', async (req, res) => {
+    if(!req.body.openid){
+        res.send({
+            code: '500',
+            msg: "openid不存在"
+        })
+        return false;
+    }
     const ins = await questionService.getQuestion(req.body);
-    console.log(ins)
-    res.send(ins)
+    if (ins) {
+        res.send({
+            code: '400',
+            msg: "已经提交过问卷"
+        })
+    } else {
+        res.send({
+            code: '200',
+            msg: "还未提交"
+        })
+    }
 })
 module.exports = router;
