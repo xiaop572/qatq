@@ -82,7 +82,7 @@ export default {
       drawNumber: 2,
       getCardDis: false,
       cardShow: false,
-      cardSrc: ""
+      cardSrc: "",
     };
   },
   methods: {
@@ -286,7 +286,8 @@ export default {
       margin: auto;
       width: 4rem;
       height: 6rem;
-      background: #8ec8f9;
+      background: url('../assets/drawCardBg.png') no-repeat;
+      background-size: cover;
       animation: rotatePeople 1.5s ease 2;
       border-radius: 0.2rem;
       overflow: hidden;

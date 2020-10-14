@@ -11,6 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 // 解析 application/json 格式的请求体
 app.use(express.json());
 app.use('/api/wx',require('./api/wx'));
+app.use('/api/question',require('./api/question'));
 const port = 5008;
 app.listen(port, () => {
   console.log(`server listen on ${port}`);
