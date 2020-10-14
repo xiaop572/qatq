@@ -1,0 +1,342 @@
+<template>
+  <div class="collectCard">
+    <img src="../assets/topCity.png" alt class="topCity" />
+    <img src="../assets/cardCaption.png" alt class="cardCaption" />
+    <div class="countDown">
+      活动倒计时：
+      <span>20</span>
+      天
+      <span>12</span>时
+      <span>51</span>分
+      <span>38</span>秒
+    </div>
+    <div class="rule">
+      <img src="../assets/ruleBg.png" alt class="ruleBg" />
+      <h4>活动规则:</h4>
+      <p>1.每天进入活动都可以领取3次抽卡机会</p>
+      <p>2.已经助力过的好友不能重复助力</p>
+    </div>
+    <div class="gather-card-box">
+      <div class="card-box">
+        <div class="card-item">
+          <img src="../assets/1_1.jpg" alt />
+          <span>0</span>
+        </div>
+        <div class="card-item">
+          <img src="../assets/1_1.jpg" alt />
+          <span>0</span>
+        </div>
+        <div class="card-item">
+          <img src="../assets/1_1.jpg" alt />
+          <span>0</span>
+        </div>
+        <div class="card-item">
+          <img src="../assets/1_1.jpg" alt />
+          <span>0</span>
+        </div>
+        <div class="card-item">
+          <img src="../assets/1_1.jpg" alt />
+          <span>0</span>
+        </div>
+        <div class="card-item">
+          <img src="../assets/1_1.jpg" alt />
+          <span>0</span>
+        </div>
+        <div class="card-item">
+          <img src="../assets/1_1.jpg" alt />
+          <span>0</span>
+        </div>
+        <div class="card-item">
+          <img src="../assets/1_1.jpg" alt />
+          <span>0</span>
+        </div>
+        <div class="card-item">
+          <img src="../assets/1_1.jpg" alt />
+          <span>0</span>
+        </div>
+      </div>
+      <div class="gather-btn-list">
+        <div class="gather-btn" @click="getCard">开始抽卡 x{{drawNumber}}</div>
+        <div class="gather-btn">求助好友</div>
+      </div>
+      <p class="person-count">
+        当前参与人数
+        <span>6</span>人
+      </p>
+    </div>
+    <!-- <div class="noLuckyDraw">未集齐卡片无法抽奖</div> -->
+    <div class="luckyDraw">已集满,8月8号开奖</div>
+    <div class="getCard" v-if="getCardDis">
+      <h2 class="get-card-caption">恭喜您获得一张卡片</h2>
+      <div class="card">
+        <img :src="cardSrc" alt v-if="cardShow" />
+      </div>
+      <div class="furl-card" @click="putCardBag" v-if="cardShow">收入卡包</div>
+    </div>
+  </div>
+</template>
+<script>
+export default {
+  data() {
+    return {
+      drawNumber: 2,
+      getCardDis: false,
+      cardShow: false,
+      cardSrc: ""
+    };
+  },
+  methods: {
+    getCard() {
+      this.getCardDis = true;
+      this.preventWear();
+      setTimeout(() => {
+        this.cardShow = true;
+        this.cardSrc = require("@/assets/1.jpg");
+      }, 3000);
+    },
+    putCardBag() {
+      this.getCardDis = false;
+      this.cardShow = false;
+      this.preventWear();
+    },
+    preventWear() {
+      if (this.getCardDis) {
+        document.body.style.overflow = "hidden";
+      } else {
+        document.body.style.overflow = "auto";
+      }
+    }
+  }
+};
+</script>
+<style lang="less" scoped>
+.collectCard {
+  height: auto;
+
+  .topCity {
+    width: 100%;
+  }
+
+  .cardCaption {
+    width: 100%;
+    margin-top: -2.5rem;
+  }
+
+  .countDown {
+    width: 6.3rem;
+    height: 0.8rem;
+    background-image: url("../assets//countDownBg.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    margin: auto;
+    line-height: 0.8rem;
+    font-size: 0.26rem;
+    color: #cb3333;
+    font-family: Microsoft YaHei;
+    font-weight: 400;
+    span {
+      color: #fff;
+      display: inline-block;
+      width: 0.4rem;
+      height: 0.4rem;
+      background: #cb3333;
+      line-height: 0.4rem;
+      margin: 0 0.04rem;
+    }
+  }
+  .rule {
+    width: 7.16rem;
+    height: 1.9rem;
+    background-color: #fffbd2;
+    border-radius: 0.1rem;
+    margin: auto;
+    position: relative;
+    text-align: left;
+    color: #ff7933;
+    h4 {
+      font-size: 0.26rem;
+      margin-left: 0.32rem;
+      font-family: Adobe Heiti Std;
+      font-weight: normal;
+      position: relative;
+      z-index: 12;
+      top: 0.3rem;
+    }
+    p {
+      font-size: 0.22rem;
+      position: relative;
+      top: 0.1rem;
+      margin: 0.05rem 0 0 0.32rem;
+      z-index: 12;
+    }
+    .ruleBg {
+      position: absolute;
+      right: 0.1rem;
+      bottom: -0.15rem;
+      height: 1.8rem;
+    }
+  }
+  .gather-card-box {
+    width: 7.16rem;
+    background: #fffbd2;
+    border-radius: 0.1rem;
+    margin: 0.42rem auto 0 auto;
+    padding: 0 0.15rem 0.38rem 0.15rem;
+    box-sizing: border-box;
+    .card-box {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      align-content: flex-start;
+      .card-item {
+        margin-top: 0.38rem;
+        flex: 0 0 20%;
+        position: relative;
+        img {
+          width: 1.1rem;
+        }
+        span {
+          position: absolute;
+          right: -0rem;
+          top: -0.12rem;
+          width: 0.35rem;
+          height: 0.35rem;
+          background: #cc3333;
+          color: #fff;
+          border-radius: 0.175rem;
+          font-size: 0.18rem;
+          font-family: Microsoft YaHei;
+          font-weight: 400;
+          line-height: 0.35rem;
+        }
+      }
+    }
+  }
+  .luckyDraw {
+    width: 100%;
+    height: 1rem;
+    background-image: url("../assets/gatherSuccess.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin: 0.6rem auto;
+    font-size: 0.3rem;
+    font-family: Adobe Heiti Std;
+    font-weight: normal;
+    color: #f02434;
+    line-height: 1.05rem;
+    letter-spacing: 3px;
+  }
+  .noLuckyDraw {
+    width: 100%;
+    height: 1rem;
+    background-image: url("../assets/noCollect.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin: 0.6rem auto;
+    font-size: 0.3rem;
+    font-family: Adobe Heiti Std;
+    font-weight: normal;
+    color: #333333;
+    line-height: 1.05rem;
+    letter-spacing: 3px;
+  }
+  .gather-btn-list {
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    margin: 0.38rem auto 0 auto;
+    .gather-btn {
+      width: 2.77rem;
+      height: 0.93rem;
+      background: url("../assets/gatherBtnBg.png") no-repeat;
+      background-size: cover;
+      border-radius: 0.47rem;
+      line-height: 0.93rem;
+      font-size: 0.29rem;
+      font-family: Adobe Heiti Std;
+      font-weight: normal;
+      color: #f02334;
+    }
+  }
+  .person-count {
+    font-size: 0.24rem;
+    font-family: Microsoft YaHei;
+    font-weight: 400;
+    color: #333333;
+    margin: 0.25rem 0 0 0;
+    span {
+      color: #ff3333;
+      margin: 0 2px;
+    }
+  }
+  .getCard {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background: rgba(0, 0, 0, 0.6);
+    top: 0;
+    left: 0;
+    z-index: 20;
+    overflow: hidden;
+    .card {
+      position: absolute;
+      left: 0;
+      top: 3rem;
+      right: 0;
+      margin: auto;
+      width: 4rem;
+      height: 6rem;
+      background: #8ec8f9;
+      animation: rotatePeople 1.5s ease 2;
+      border-radius: 0.2rem;
+      overflow: hidden;
+      img {
+        width: 100%;
+      }
+    }
+    .get-card-caption {
+      color: #fff;
+      position: absolute;
+      left: 0;
+      top: 2rem;
+      right: 0;
+      margin: auto;
+      letter-spacing: 3px;
+      font-size: 0.36rem;
+      text-align: center;
+    }
+    .furl-card {
+      width: 2.77rem;
+      height: 0.93rem;
+      background: url("../assets/gatherBtnBg.png") no-repeat;
+      background-size: cover;
+      border-radius: 0.47rem;
+      line-height: 0.93rem;
+      font-size: 0.29rem;
+      font-family: Adobe Heiti Std;
+      font-weight: normal;
+      color: #f02334;
+      position: absolute;
+      position: absolute;
+      left: 0;
+      top: 9.6rem;
+      right: 0;
+      margin: auto;
+    }
+  }
+  background-color: #fbd8c8;
+  background-image: url("../assets/cardBg.png");
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  background-position: bottom;
+  overflow: hidden;
+}
+@keyframes rotatePeople {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(360deg);
+  }
+}
+</style>
