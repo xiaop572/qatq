@@ -31,11 +31,10 @@ router.get('/get_wx_access_token', function (req, res, next) {
                         if (response.statusCode == 200) {
                             // 第四步：根据获取的用户信息进行对应操作
                             var userinfo = JSON.parse(body);
-                            const ins = await wxUserSer.getUser(userinfo.openid);
-                            console.log(ins)
+                            const ins = await wxUserSer.getUser(userinfo);
                             if (!ins) {
-                                wxUserSer.addUser(userinfo)
-                                cardSer.add(userinfo)
+                                await wxUserSer.addUser(userinfo)
+                                await cardSer.add(userinfo)
                             }
 
                             res.redirect(301, 'http://lpc.natapp1.cc/?openid=' + userinfo.openid);
@@ -54,6 +53,7 @@ router.get('/get_wx_access_token', function (req, res, next) {
     );
 })
 router.post('/getUserInfo', async (req, res) => {
+    console.log(req.body)
     if (!req.body.openid) {
         res.send({
             code: '500',
@@ -61,7 +61,7 @@ router.post('/getUserInfo', async (req, res) => {
         })
         return false;
     }
-    const ins = await wxUserSer.getUser(req.body.openid)
+    const ins = await wxUserSer.getUser(req.body)
     res.send(ins)
 })
 module.exports = router;

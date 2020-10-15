@@ -1,18 +1,33 @@
 const wxUser = require('../models/wxUser');
-const moment=require('moment')
+const moment = require('moment')
 exports.addUser = async function (obj) {
-    obj.loginTime=moment().utc().unix().toString();
-    console.log(obj)
+    obj.loginTime = moment().utc().unix().toString();
+    obj.smokeCardNumber=3;
     const ins = await wxUser.create(obj);
     if (!ins) return false;
     return ins.toJSON();
 }
-exports.getUser = async function (openid) {
+exports.getUser = async function (obj) {
     const ins = await wxUser.findOne({
         where: {
-            openid: openid
+            openid: obj.openid
         }
     })
+    if (!ins) return false;
+    return ins.toJSON()
+}
+exports.getFirstCardNumber = async function (obj, nowTime) {
+    const ins = await wxUser.findOne({
+        where: {
+            openid: obj.openid
+        }
+    })
+    const insJson = ins.toJSON()
+    if (nowTime > insJson.loginTime) {
+        ins.loginTime = nowTime;
+        ins.smokeCardNumber += 3;
+    }
+    await ins.save();
     if (!ins) return false;
     return ins.toJSON()
 }

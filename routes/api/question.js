@@ -3,6 +3,13 @@ const router = express.Router();
 const request = require('request');
 const questionService = require('../../services/questionService')
 router.post('/add', async (req, res) => {
+    if (!req.body.openid) {
+        res.send({
+            code: '500',
+            msg: "openid不存在"
+        })
+        return false;
+    }
     const ins = await questionService.addQuestion(req.body);
     if (ins) {
         res.send({
@@ -17,7 +24,7 @@ router.post('/add', async (req, res) => {
     }
 })
 router.post('/get', async (req, res) => {
-    if(!req.body.openid){
+    if (!req.body.openid) {
         res.send({
             code: '500',
             msg: "openid不存在"

@@ -53,6 +53,11 @@ module.exports = sequelize.define(
             allowNull: false,
             defaultValue:0
         },
+        successCard:{
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue:0
+        }
     }, {
         createdAt: false,
         updatedAt: false,

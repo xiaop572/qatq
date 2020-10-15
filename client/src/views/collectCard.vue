@@ -6,7 +6,9 @@
       活动倒计时：
       <span>20</span>
       天
-      <span>12</span>时 <span>51</span>分 <span>38</span>秒
+      <span>12</span>时
+      <span>51</span>分
+      <span>38</span>秒
     </div>
     <div class="rule">
       <img src="../assets/ruleBg.png" alt class="ruleBg" />
@@ -15,18 +17,27 @@
       <p>2.已经助力过的好友不能重复助力</p>
     </div>
     <div class="gather-card-box">
-      <div class="card-box">
-        <div class="card-item" v-for="(item, index) in cardList" :key="index">
-          <img :src="item.src" alt :class="{succuess:item.type==='success'}"/>
-          <span>{{ item.number }}</span>
+      <template v-if="successCard">
+        <div class="card-box">
+          <div class="card-item success">
+            <img :src="successCard.src" alt />
+            <span>{{ successCard.number }}</span>
+            <p>已集齐卡片,等开奖!</p>
+          </div>
         </div>
-      </div>
-      <div class="gather-btn-list">
-        <div class="gather-btn" @click="getCard">
-          开始抽卡 x{{ drawNumber }}
+      </template>
+      <template v-else>
+        <div class="card-box">
+          <div class="card-item" v-for="(item, index) in cardList" :key="index">
+            <img :src="item.src" alt />
+            <span>{{ item.number }}</span>
+          </div>
         </div>
-        <div class="gather-btn">求助好友</div>
-      </div>
+        <div class="gather-btn-list">
+          <div class="gather-btn" @click="getCard">开始抽卡 x{{ smokeCardNumber }}</div>
+          <div class="gather-btn">求助好友</div>
+        </div>
+      </template>
       <p class="person-count">
         当前参与人数
         <span>6</span>人
@@ -48,25 +59,41 @@ import axios from "axios";
 export default {
   data() {
     return {
-      drawNumber: 2,
       getCardDis: false,
       cardShow: false,
       cardSrc: "",
       cardList: [],
+      smokeCardNumber: 0,
+      successCard: null
     };
   },
   methods: {
     getCard() {
+      this.cardSrc = "";
+      let user = localStorage.getItem("userInfo");
+      const userData = JSON.parse(user);
       this.getCardDis = true;
       this.preventWear();
+      let src = "";
       setTimeout(() => {
         this.cardShow = true;
-        this.cardSrc = require("@/assets/1.jpg");
+        this.cardSrc = require(`@/assets/${src}.jpg`);
       }, 3000);
+      axios
+        .post("/api/card/abstractCard", {
+          openid: userData.openid
+        })
+        .then(res => {
+          if (res.data.code === "200") {
+            this.cardShow = true;
+            src = res.data.data.num;
+          }
+        });
     },
     putCardBag() {
       this.getCardDis = false;
       this.cardShow = false;
+      this.getCardList();
       this.preventWear();
     },
     preventWear() {
@@ -81,37 +108,31 @@ export default {
       const userData = JSON.parse(user);
       axios
         .post("/api/card/getCardList", {
-          openid: userData.openid,
+          openid: userData.openid
         })
-        .then((res) => {
+        .then(res => {
           if (res.data.code === "200") {
             this.cardList = [];
             const data = res.data.data;
-            let state = true;
-            for (let item in data) {
-              if (data[item] === 0) {
-                state = false;
-              }
-            }
-            if (state) {
-              this.cardList.push({
-                src: require(`@/assets/cardSuccess.jpg`),
-                number: 1,
-                type:'success'
-              });
+            if (data["successCard"]) {
+              this.successCard = {
+                src: require(`@/assets/10.jpg`),
+                number: 1
+              };
               return true;
             }
+            delete data.successCard;
             let i = 1;
             for (let item in data) {
               if (data[item] > 0) {
                 this.cardList.push({
                   src: require(`@/assets/${i}.jpg`),
-                  number: data[item],
+                  number: data[item]
                 });
               } else {
                 this.cardList.push({
                   src: require(`@/assets/${i}_${i}.jpg`),
-                  number: 0,
+                  number: 0
                 });
               }
               i++;
@@ -119,10 +140,22 @@ export default {
           }
         });
     },
+    getCardNumber() {
+      let user = localStorage.getItem("userInfo");
+      const userData = JSON.parse(user);
+      axios
+        .post("/api/card/firstCardNumber", {
+          openid: userData.openid
+        })
+        .then(res => {
+          this.smokeCardNumber = res.data.data.smokeCardNumber;
+        });
+    }
   },
   mounted() {
     this.getCardList();
-  },
+    this.getCardNumber();
+  }
 };
 </script>
 <style lang="less" scoped>
@@ -341,8 +374,26 @@ export default {
       margin: auto;
     }
   }
-  .succuess{
-    width: 1.8rem !important;
+  .success {
+    margin-top: 0.85rem !important;
+    img {
+      width: 3.39rem !important;
+      height: 4.87rem !important;
+      background: #ffb695;
+      border: 5px solid #ffffff;
+      box-shadow: 7px 6px 16px 0px rgba(252, 78, 59, 0.5);
+      border-radius: 0.2rem;
+    }
+    span {
+      display: none;
+    }
+    p {
+      font-size: 0.3rem;
+      font-family: Adobe Heiti Std;
+      font-weight: bold;
+      color: #f02334;
+      margin-top: 0.7rem;
+    }
   }
   background-color: #fbd8c8;
   background-image: url("../assets/cardBg.png");
