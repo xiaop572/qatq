@@ -329,54 +329,10 @@ export default {
           }
         });
     },
-    getQueryVariable(variable) {
-      var query = window.location.search.substring(1);
-      var vars = query.split("&");
-      for (var i = 0; i < vars.length; i++) {
-        var pair = vars[i].split("=");
-        if (pair[0] == variable) {
-          return pair[1];
-        }
-      }
-      return false;
-    },
-    isFill() {
-      let user = localStorage.getItem("userInfo");
-      const userData = JSON.parse(user);
-      axios
-        .post("/api/question/get", {
-          openid: userData.openid
-        })
-        .then(res => {
-          if (res.data.code === "400") {
-            this.$router.push("/collectCard");
-          } else if (res.data.code !== "200") {
-            localStorage.clear();
-            location.href = "/api/wx/login";
-          }
-        });
-    }
+    
   },
   mounted() {
-    const openid = this.getQueryVariable("openid");
-    let user = localStorage.getItem("userInfo");
-    if (!user) {
-      if (openid) {
-        axios
-          .post("/api/wx/getUserInfo", {
-            openid
-          })
-          .then(res => {
-            console.log(res);
-            localStorage.setItem("userInfo", JSON.stringify(res.data));
-            this.isFill()
-          });
-      } else {
-        location.href = "/api/wx/login";
-      }
-    }else{
-      this.isFill()
-    }
+    
   }
 };
 </script>

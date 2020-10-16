@@ -1,4 +1,5 @@
 // 同步所有模型
+require("./help");
 require("./wxUser");
 require("./questionnaire");
 require("./card");
