@@ -6,9 +6,7 @@
       活动倒计时：
       <span>20</span>
       天
-      <span>12</span>时
-      <span>51</span>分
-      <span>38</span>秒
+      <span>12</span>时 <span>51</span>分 <span>38</span>秒
     </div>
     <div class="rule">
       <img src="../assets/ruleBg.png" alt class="ruleBg" />
@@ -34,13 +32,15 @@
           </div>
         </div>
         <div class="gather-btn-list">
-          <div class="gather-btn" @click="getCard">开始抽卡 x{{ smokeCardNumber }}</div>
+          <div class="gather-btn" @click="getCard">
+            开始抽卡 x{{ smokeCardNumber }}
+          </div>
           <div class="gather-btn">求助好友</div>
         </div>
       </template>
       <p class="person-count">
         当前参与人数
-        <span>6</span>人
+        <span>{{userCount}}</span>人
       </p>
     </div>
     <!-- <div class="noLuckyDraw">未集齐卡片无法抽奖</div> -->
@@ -56,6 +56,7 @@
 </template>
 <script>
 import axios from "axios";
+import { Dialog } from "vant";
 export default {
   data() {
     return {
@@ -64,29 +65,39 @@ export default {
       cardSrc: "",
       cardList: [],
       smokeCardNumber: 0,
-      successCard: null
+      successCard: null,
+      userCount:0
     };
   },
   methods: {
+    //抽卡
     getCard() {
-      this.cardSrc = "";
       let user = localStorage.getItem("userInfo");
-      const userData = JSON.parse(user);
-      this.getCardDis = true;
-      this.preventWear();
       let src = "";
-      setTimeout(() => {
-        this.cardShow = true;
-        this.cardSrc = require(`@/assets/${src}.jpg`);
-      }, 3000);
+      const userData = JSON.parse(user);
       axios
         .post("/api/card/abstractCard", {
-          openid: userData.openid
+          openid: userData.openid,
         })
-        .then(res => {
+        .then((res) => {
           if (res.data.code === "200") {
-            this.cardShow = true;
+            console.log(res.data.data);
             src = res.data.data.num;
+            this.smokeCardNumber = res.data.data.smokeCardNumber;
+            this.cardSrc = "";
+            this.getCardDis = true;
+            this.cardShow = false;
+            this.preventWear();
+
+            setTimeout(() => {
+              this.cardShow = true;
+              this.cardSrc = require(`@/assets/${src}.jpg`);
+            }, 3000);
+          } else {
+            Dialog.alert({
+              title: "集卡有礼",
+              message: "抽卡次数已用完!",
+            });
           }
         });
     },
@@ -108,16 +119,16 @@ export default {
       const userData = JSON.parse(user);
       axios
         .post("/api/card/getCardList", {
-          openid: userData.openid
+          openid: userData.openid,
         })
-        .then(res => {
+        .then((res) => {
           if (res.data.code === "200") {
             this.cardList = [];
             const data = res.data.data;
             if (data["successCard"]) {
               this.successCard = {
                 src: require(`@/assets/10.jpg`),
-                number: 1
+                number: 1,
               };
               return true;
             }
@@ -127,12 +138,12 @@ export default {
               if (data[item] > 0) {
                 this.cardList.push({
                   src: require(`@/assets/${i}.jpg`),
-                  number: data[item]
+                  number: data[item],
                 });
               } else {
                 this.cardList.push({
                   src: require(`@/assets/${i}_${i}.jpg`),
-                  number: 0
+                  number: 0,
                 });
               }
               i++;
@@ -145,17 +156,29 @@ export default {
       const userData = JSON.parse(user);
       axios
         .post("/api/card/firstCardNumber", {
-          openid: userData.openid
+          openid: userData.openid,
         })
-        .then(res => {
+        .then((res) => {
           this.smokeCardNumber = res.data.data.smokeCardNumber;
         });
-    }
+    },
+    getUserCount() {
+      let user = localStorage.getItem("userInfo");
+      const userData = JSON.parse(user);
+      axios
+        .post("/api/wx/getUserCount", {
+          openid: userData.openid,
+        })
+        .then((res) => {
+          this.userCount=res.data.data.count
+        });
+    },
   },
   mounted() {
     this.getCardList();
     this.getCardNumber();
-  }
+    this.getUserCount()
+  },
 };
 </script>
 <style lang="less" scoped>

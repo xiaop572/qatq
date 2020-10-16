@@ -30,12 +30,22 @@ router.post('/abstractCard', async (req, res) => {
         })
         return false;
     }
+    const consumeState = await wxUserSer.consumeCardNum(req.body);
+    console.log(consumeState)
+    if (!consumeState) {
+        res.send({
+            code: '400',
+            msg:'没有抽卡次数'
+        })
+        return;
+    }
     const ran = Math.ceil(Math.random() * 850 / 100);
     await cardService.abstractCard(req.body, ran);
     res.send({
         code: '200',
         data: {
-            num:ran
+            num: ran,
+            smokeCardNumber:consumeState.smokeCardNumber
         }
     })
 })

@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const request = require('request');
 const wxUserSer = require('../../services/wxUserService')
-const cardSer=require('../../services/cardService')
+const cardSer = require('../../services/cardService')
 let AppID = "wx94dd8f9eaa2710a8"
 let AppSecret = "369e9af70eb0a3caf88ec0d42ecf91e4"
 router.get('/login', async (req, res) => {
@@ -63,5 +63,21 @@ router.post('/getUserInfo', async (req, res) => {
     }
     const ins = await wxUserSer.getUser(req.body)
     res.send(ins)
+})
+router.post('/getUserCount', async (req, res) => {
+    if (!req.body.openid) {
+        res.send({
+            code: '500',
+            msg: "openid不存在"
+        })
+        return false;
+    }
+    const ins = await wxUserSer.getUserCount(req.body)
+    res.send({
+        code:'200',
+        data:{
+            count:ins
+        }
+    })
 })
 module.exports = router;
