@@ -4,11 +4,11 @@
     <img src="../assets/cardCaption.png" alt class="cardCaption" />
     <div class="countDown">
       活动倒计时：
-      <span>20</span>
+      <span>{{time.d}}</span>
       天
-      <span>12</span>时
-      <span>51</span>分
-      <span>38</span>秒
+      <span>{{time.h}}</span>时
+      <span>{{time.m}}</span>分
+      <span>{{time.s}}</span>秒
     </div>
     <div class="rule">
       <img src="../assets/ruleBg.png" alt class="ruleBg" />
@@ -35,7 +35,7 @@
         </div>
         <div class="gather-btn-list">
           <div class="gather-btn" @click="getCard">开始抽卡 x{{ smokeCardNumber }}</div>
-          <div class="gather-btn">求助好友</div>
+          <div class="gather-btn" @click="changeGuvis">求助好友</div>
         </div>
       </template>
       <p class="person-count">
@@ -44,7 +44,10 @@
       </p>
     </div>
     <!-- <div class="noLuckyDraw">未集齐卡片无法抽奖</div> -->
-    <div class="luckyDraw">已集满,8月8号开奖</div>
+    <div class="luckyDraw" v-if="successCard && gameState">已集满,10月18号开奖</div>
+    <div class="luckyDraw" v-if="successCard && !gameState">立即开奖</div>
+    <div class="noLuckyDraw" v-if="!successCard && gameState">未集齐卡片无法抽奖</div>
+    <div class="noLuckyDraw" v-if="!successCard && !gameState">活动已结束</div>
     <div class="getCard" v-if="getCardDis">
       <h2 class="get-card-caption">恭喜您获得一张卡片</h2>
       <div class="card">
@@ -52,10 +55,19 @@
       </div>
       <div class="furl-card" @click="putCardBag" v-if="cardShow">收入卡包</div>
     </div>
+    <div class="guidance" v-if="guVis" @click="changeGuvis">
+      <img src="../assets/guidance.png" />
+      <span>请点击右上角将它发送给指定朋友</span>
+    </div>
+    <div class="successCardRemin" v-if="drawCardsuc">
+      <img src="../assets/10.jpg" />
+      <div class="furl-card" @click="drawCardsuc=false;sucBtn=false" v-if="sucBtn">恭喜集满卡片!</div>
+    </div>
   </div>
 </template>
 <script>
 import axios from "axios";
+import moment from "moment";
 import { Dialog } from "vant";
 export default {
   data() {
@@ -67,12 +79,29 @@ export default {
       smokeCardNumber: 0,
       successCard: null,
       userCount: 0,
-      sign: null
+      sign: null,
+      guVis: false,
+      time: {
+        d: 0,
+        h: 0,
+        m: 0,
+        s: 0
+      },
+      timer: null,
+      gameState: true,
+      drawCardsuc: false,
+      sucBtn: false
     };
   },
   methods: {
     //抽卡
     getCard() {
+      if (!this.gameState) {
+        Dialog.alert({
+          title: "集卡有礼",
+          message: "抽卡时间已结束!"
+        });
+      }
       let user = localStorage.getItem("userInfo");
       let src = "";
       const userData = JSON.parse(user);
@@ -82,7 +111,6 @@ export default {
         })
         .then(res => {
           if (res.data.code === "200") {
-            console.log(res.data.data);
             src = res.data.data.num;
             this.smokeCardNumber = res.data.data.smokeCardNumber;
             this.cardSrc = "";
@@ -102,10 +130,51 @@ export default {
           }
         });
     },
+    //显示分享好友
+    changeGuvis() {
+      this.guVis = !this.guVis;
+      if (this.guVis) {
+        document.body.style.overflow = "hidden";
+      } else {
+        document.body.style.overflow = "auto";
+      }
+    },
+    cd(t1, t2, tg) {
+      //相差的毫秒数
+      var ms = Date.parse(t1) - Date.parse(t2);
+      var minutes = 1000 * 60;
+      var hours = minutes * 60;
+      var days = hours * 24;
+      var years = days * 365;
+      //求出天数
+      var d = Math.floor(ms / days);
+      //求出除开天数，剩余的毫秒数
+      ms %= days;
+      var h = Math.floor(ms / hours);
+      ms %= hours;
+      var m = Math.floor(ms / minutes);
+      ms %= minutes;
+      var s = Math.floor(ms / 1000);
+      //返回所需值并退出函数
+      switch (tg) {
+        case "d":
+          if (d < 0) return 0;
+          return d;
+        case "h":
+          if (h < 0) return 0;
+          return h;
+        case "m":
+          if (m < 0) return 0;
+          return m;
+        case "s":
+          if (s < 0) return 0;
+          return s;
+      }
+    },
     putCardBag() {
       this.getCardDis = false;
       this.cardShow = false;
-      this.getCardList();
+      this.getCardList("extact");
       this.preventWear();
     },
     preventWear() {
@@ -115,7 +184,7 @@ export default {
         document.body.style.overflow = "auto";
       }
     },
-    getCardList() {
+    getCardList(state) {
       let user = localStorage.getItem("userInfo");
       const userData = JSON.parse(user);
       axios
@@ -127,6 +196,14 @@ export default {
             this.cardList = [];
             const data = res.data.data;
             if (data["successCard"]) {
+              if (state) {
+                setTimeout(() => {
+                  this.drawCardsuc = true;
+                  setTimeout(() => {
+                    this.sucBtn = true;
+                  }, 2200);
+                }, 500);
+              }
               this.successCard = {
                 src: require(`@/assets/10.jpg`),
                 number: 1
@@ -176,6 +253,22 @@ export default {
     }
   },
   mounted() {
+    var t1 = "2020/10/18 12:26";
+    this.timer = setInterval(() => {
+      this.time.d = this.cd(t1, new Date(), "d");
+      this.time.h = this.cd(t1, new Date(), "h");
+      this.time.m = this.cd(t1, new Date(), "m");
+      this.time.s = this.cd(t1, new Date(), "s");
+      if (
+        this.time.d == 0 &&
+        this.time.h == 0 &&
+        this.time.m == 0 &&
+        this.time.s == 0
+      ) {
+        this.gameState = false;
+        clearInterval(this.timer);
+      }
+    }, 1000);
     this.getCardList();
     this.getCardNumber();
     this.getUserCount();
@@ -185,7 +278,6 @@ export default {
 <style lang="less" scoped>
 .collectCard {
   height: auto;
-
   .topCity {
     width: 100%;
   }
@@ -194,7 +286,38 @@ export default {
     width: 100%;
     margin-top: -2.5rem;
   }
-
+  .successCardRemin {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background: rgba(0, 0, 0, 0.6);
+    top: 0;
+    left: 0;
+    z-index: 20;
+    overflow: hidden;
+    img {
+      width: 4rem;
+      transform: rotateY(0deg) translateY(20vh);
+      animation: successCard 2s ease 1;
+    }
+    .furl-card {
+      width: 2.77rem;
+      height: 0.93rem;
+      background: url("../assets/gatherBtnBg.png") no-repeat;
+      background-size: cover;
+      border-radius: 0.47rem;
+      line-height: 0.93rem;
+      font-size: 0.26rem;
+      font-family: Adobe Heiti Std;
+      font-weight: normal;
+      color: #f02334;
+      position: absolute;
+      left: 0;
+      top: 9rem;
+      right: 0;
+      margin: auto;
+    }
+  }
   .countDown {
     width: 6.3rem;
     height: 0.8rem;
@@ -418,6 +541,32 @@ export default {
       margin-top: 0.7rem;
     }
   }
+  .guidance {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background: rgba(0, 0, 0, 0.6);
+    top: 0;
+    left: 0;
+    z-index: 20;
+    overflow: hidden;
+    img {
+      position: absolute;
+      z-index: 20;
+      top: 0.4rem;
+      right: 0.4rem;
+      width: 2.6rem;
+    }
+    span {
+      width: 2.6rem;
+      color: #fff;
+      position: absolute;
+      top: 1.2rem;
+      right: 2.9rem;
+      font-size: 0.36rem;
+      font-weight: bold;
+    }
+  }
   background-color: #fbd8c8;
   background-image: url("../assets/cardBg.png");
   background-repeat: no-repeat;
@@ -431,6 +580,14 @@ export default {
   }
   100% {
     transform: rotateY(360deg);
+  }
+}
+@keyframes successCard {
+  0% {
+    transform: rotateY(0deg) translateY(100vh);
+  }
+  100% {
+    transform: rotateY(360deg) translateY(20vh);
   }
 }
 </style>

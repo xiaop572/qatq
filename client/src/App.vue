@@ -15,7 +15,8 @@ export default {
   data() {
     return {
       helpVis: false,
-      helpMsg: "为TA助力"
+      helpMsg: "为TA助力",
+      getCardDi:false
     };
   },
   methods: {
@@ -87,6 +88,13 @@ export default {
           });
         });
     },
+    preventWear() {
+      if (this.getCardDi) {
+        document.body.style.overflow = "hidden";
+      } else {
+        document.body.style.overflow = "auto";
+      }
+    },
     helpFriend() {
       let user = JSON.parse(localStorage.getItem("userInfo"));
       const superior = this.getQueryVariable("superior");
@@ -109,6 +117,7 @@ export default {
               });
             }
             this.helpVis = false;
+            this.getCardDi=false;
           });
       }
     },
@@ -125,6 +134,7 @@ export default {
           .then(res => {
             if (res.data.code === "200") {
               this.helpVis = res.data.data.state;
+              this.getCardDi =res.data.data.state;
             }
           });
       }
