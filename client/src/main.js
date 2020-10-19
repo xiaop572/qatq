@@ -5,8 +5,8 @@ import store from './store'
 import Vant from 'vant';
 import 'vant/lib/index.css';
 
-import Vconsole from 'vconsole'
-const vConsole = new Vconsole()
+// import Vconsole from 'vconsole'
+// const vConsole = new Vconsole()
 
 Vue.use(Vant);
 Vue.config.productionTip = false

@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const history = require("connect-history-api-fallback");
+app.use(history());
 // 映射public目录中的静态资源
 const path = require("path");
 var cookieParser = require('cookie-parser');
@@ -16,8 +18,9 @@ app.use('/api/wx',require('./api/wx'));
 app.use('/api/question',require('./api/question'));
 app.use('/api/card',require('./api/card'));
 app.use('/api/help',require('./api/help'));
+app.use('/api/wining',require('./api/wining'));
 app.use(require("./errorMiddleware"));
-const port = 5008;
+const port = 22307;
 app.listen(port, () => {
   console.log(`server listen on ${port}`);
 });
