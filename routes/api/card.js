@@ -4,6 +4,7 @@ const request = require('request');
 const cardService = require('../../services/cardService')
 const wxUserSer = require('../../services/wxUserService')
 const moment = require('moment')
+const config = require('../../config')
 router.post('/getCardList', async (req, res) => {
     console.log(req.body.openid)
     if (!req.body.openid) {
@@ -23,6 +24,7 @@ router.post('/getCardList', async (req, res) => {
 })
 //抽取卡片
 router.post('/abstractCard', async (req, res) => {
+    console.log(config)
     if (!req.body.openid) {
         res.send({
             code: '500',
@@ -31,21 +33,43 @@ router.post('/abstractCard', async (req, res) => {
         return false;
     }
     const consumeState = await wxUserSer.consumeCardNum(req.body);
-    console.log(consumeState)
     if (!consumeState) {
         res.send({
             code: '400',
-            msg:'没有抽卡次数'
+            msg: '没有抽卡次数'
         })
         return;
     }
-    const ran = Math.ceil(Math.random() * 850 / 100);
+    let ran;
+    if (moment().unix() > moment(config.ProbaTime).unix()) {
+        const ins = await cardService.getCardList(req.body);
+        let i = 1;
+        let drawArr = []
+        delete ins.id;
+        delete ins.openid;
+        delete ins.successCard;
+        for (let item in ins) {
+            if (ins[item] === 0) {
+                for(let j=0;j<5;j++){
+                    drawArr.push(i)
+                }
+            }else{
+                drawArr.push(i)
+            }
+            i++;
+        }
+        let length=drawArr.length;
+        let num=Math.floor(Math.random() * length);
+        ran = drawArr[num];
+    } else {
+        ran = Math.ceil(Math.random() * 850 / 100);
+    }
     await cardService.abstractCard(req.body, ran);
     res.send({
         code: '200',
         data: {
             num: ran,
-            smokeCardNumber:consumeState.smokeCardNumber
+            smokeCardNumber: consumeState.smokeCardNumber
         }
     })
 })

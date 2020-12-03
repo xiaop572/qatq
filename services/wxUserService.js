@@ -50,3 +50,12 @@ exports.getUserCount = async function (obj) {
     const ins = await wxUser.count();
     return ins;
 }
+exports.setFillArch=async function(obj){
+    const ins = await wxUser.findOne({
+        where: {
+            openid: obj.openid
+        }
+    })
+    ins.fillArch=true;
+    ins.save();
+}

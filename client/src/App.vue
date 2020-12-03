@@ -3,7 +3,7 @@
     <router-view></router-view>
     <div class="help" v-if="helpVis">
       <div class="help-main">
-        <img :src="helpObj.headimgurl" alt="" />
+        <img :src="helpObj.headimgurl" alt />
         <p>{{ helpObj.nickname }}</p>
         <div class="helpBtn" @click="helpFriend">{{ helpMsg }}</div>
       </div>
@@ -19,7 +19,7 @@ export default {
       helpVis: false,
       helpMsg: "为TA助力",
       getCardDi: false,
-      helpObj: {},
+      helpObj: {}
     };
   },
   methods: {
@@ -40,15 +40,17 @@ export default {
       const userData = JSON.parse(user);
       axios
         .post("/api/question/get", {
-          openid: userData.openid,
+          openid: userData.openid
         })
-        .then((res) => {
+        .then(res => {
           if (res.data.code === "400") {
             if (superior) {
               this.$router.push("/collectCard?superior=" + superior);
             } else {
               this.$router.push("/collectCard");
             }
+          } else if (res.data.code === "200") {
+            this.$router.push("/");
           } else if (res.data.code !== "200") {
             localStorage.clear();
             if (superior) {
@@ -64,9 +66,9 @@ export default {
       const userData = JSON.parse(user);
       axios
         .post("/api/wx/getWxSignature", {
-          url: location.href.split("#")[0],
+          url: location.href.split("#")[0]
         })
-        .then((res) => {
+        .then(res => {
           this.sign = res.data.data;
           console.log(this.sign);
           wx.config({
@@ -75,17 +77,16 @@ export default {
             timestamp: this.sign.timestamp, // 必填，生成签名的时间戳
             nonceStr: this.sign.nonceStr, // 必填，生成签名的随机串
             signature: this.sign.signature, // 必填，签名
-            jsApiList: ["updateAppMessageShareData", "updateTimelineShareData"], // 必填，需要使用的JS接口列表
+            jsApiList: ["updateAppMessageShareData", "updateTimelineShareData"] // 必填，需要使用的JS接口列表
           });
-          wx.ready(function () {
+          wx.ready(function() {
             //需在用户可能点击分享按钮前就先调用
             wx.updateAppMessageShareData({
               title: "安全感调查问卷", // 分享标题
               desc: "2020年鹿城区群众安全感调查问卷", // 分享描述
-              link: "http://patq.lin526.cn/?superior=" + userData
-                .openid, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+              link: "http://patq.lin526.cn/?superior=" + userData.openid, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
               imgUrl: "https://patq.lin526.cn/tqlogo.jpg", // 分享图标
-              success: function () {
+              success: function() {
                 // 设置成功
               }
             });
@@ -106,18 +107,18 @@ export default {
         axios
           .post("/api/help/help", {
             openid: user.openid,
-            superior,
+            superior
           })
-          .then((res) => {
+          .then(res => {
             if (res.data.code === "200") {
               Dialog.alert({
                 title: "集卡有礼",
-                message: "助力成功!",
+                message: "助力成功!"
               });
             } else {
               Dialog.alert({
                 title: "集卡有礼",
-                message: "不能为自己助力!",
+                message: "不能为自己助力!"
               });
             }
             this.helpVis = false;
@@ -133,16 +134,16 @@ export default {
         axios
           .post("/api/help/isHelp", {
             openid: JSON.parse(user).openid,
-            superior,
+            superior
           })
-          .then((res) => {
+          .then(res => {
             if (res.data.code === "200") {
               if (res.data.data.state) {
                 axios
                   .post("/api/wx/getUserInfo", {
-                    openid: superior,
+                    openid: superior
                   })
-                  .then((ress) => {
+                  .then(ress => {
                     if (ress.data.code !== "500") {
                       this.helpObj = ress.data;
                       console.log(this.helpObj);
@@ -157,7 +158,7 @@ export default {
             }
           });
       }
-    },
+    }
   },
   mounted() {
     const openid = this.getQueryVariable("openid");
@@ -167,9 +168,9 @@ export default {
       if (openid) {
         axios
           .post("/api/wx/getUserInfo", {
-            openid,
+            openid
           })
-          .then((res) => {
+          .then(res => {
             localStorage.setItem("userInfo", JSON.stringify(res.data));
             this.isFill();
             this.getSign();
@@ -191,7 +192,7 @@ export default {
         this.isHelp();
       }
     }
-  },
+  }
 };
 </script>
 <style lang="less">

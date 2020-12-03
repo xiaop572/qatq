@@ -40,6 +40,11 @@ module.exports = sequelize.define(
             type:DataTypes.INTEGER,
             allowNull:false,
             defaultValue:0
+        },
+        fillArch:{
+            type:DataTypes.BOOLEAN,
+            allowNull:false,
+            defaultValue:false
         }
     }, {
         createdAt: false,
