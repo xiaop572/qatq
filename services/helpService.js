@@ -31,7 +31,6 @@ exports.help = async function (obj) {
             openid: obj.superior
         }
     })
-    console.log(userIns,"UserIns")
     userIns.smokeCardNumber += 1;
     userIns.save()
     if (!ins) {

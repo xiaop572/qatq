@@ -23,8 +23,9 @@
         <p>1.关注“平安藤桥”微信公众号，点击链接参与活动；</p>
         <p>2.参与者每天有三次抽卡机会，分享好友，通过好友助力可获得抽卡机会</p>
         <p>集齐9张卡片可得“平安藤桥”卡，获得一次抽奖机会，人人有机会拿大奖。</p>
+        <p>3.政府机关工作人员不享受相关奖励。</p>
         <h4>奖品设置:</h4>
-        <p>一等奖1名，奖品：电动车1辆（价值4000元），政府工作人员不得享受此项。</p>
+        <p>一等奖1名，奖品：电动车1辆（价值4000元）。</p>
         <p>二等奖100名，奖品：平安藤桥电动车头盔（价值60元）。</p>
         <p>三等奖150名，话费20元。</p>
         <p>参与奖300名，话费10元。</p>
@@ -58,7 +59,7 @@
       </p>
     </div>
     <!-- <div class="noLuckyDraw">未集齐卡片无法抽奖</div> -->
-    <div class="luckyDraw" v-if="successCard && gameState">已集满,10月18号开奖</div>
+    <div class="luckyDraw" v-if="successCard && gameState">已集满,12月20号开奖</div>
     <div class="luckyDraw" v-if="successCard && !gameState" @click="choujiang">立即开奖</div>
     <div class="noLuckyDraw" v-if="!successCard && gameState">未集齐卡片无法抽奖</div>
     <div class="noLuckyDraw" v-if="!successCard && !gameState">活动已结束</div>
@@ -404,7 +405,7 @@ export default {
     }
   },
   mounted() {
-    var t1 = "2020/12/1 0:39";
+    var t1 = "2020/12/20 0:00";
     this.timer = setInterval(() => {
       this.time.d = this.cd(t1, new Date(), "d");
       this.time.h = this.cd(t1, new Date(), "h");
@@ -501,6 +502,11 @@ export default {
       transform: scale(1);
       transform-origin: center;
       margin: auto;
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
     }
     .notice {
       color: #666;

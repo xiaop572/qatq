@@ -59,3 +59,13 @@ exports.setFillArch=async function(obj){
     ins.fillArch=true;
     ins.save();
 }
+exports.updateAnswerTime=async function (obj){
+    const nowTime = moment().startOf('day').utc().format('X');
+    const ins = await wxUser.findOne({
+        where: {
+            openid: obj.openid
+        }
+    })
+    ins.answerTime=nowTime;
+    ins.save();
+}

@@ -18,6 +18,11 @@ const routes = [{
     name: 'drawLucky',
     component: () => import('../views/drawLucky.vue')
   },
+  {
+    path: '/attention',
+    name: 'attention',
+    component: () => import('../views/attention.vue')
+  },
 ]
 
 const router = new VueRouter({

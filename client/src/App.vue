@@ -50,7 +50,11 @@ export default {
               this.$router.push("/collectCard");
             }
           } else if (res.data.code === "200") {
-            this.$router.push("/");
+            if (superior) {
+              this.$router.push("/?superior=" + superior);
+            } else {
+              this.$router.push("/");
+            }
           } else if (res.data.code !== "200") {
             localStorage.clear();
             if (superior) {
@@ -90,6 +94,14 @@ export default {
                 // 设置成功
               }
             });
+            wx.updateTimelineShareData({
+              title: "安全感调查问卷", // 分享标题
+              link: "http://patq.lin526.cn/?superior=" + userData.openid, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+              imgUrl: "https://patq.lin526.cn/tqlogo.jpg", // 分享图标
+              success: function() {
+                // 设置成功
+              }
+            });
           });
         });
     },
@@ -101,6 +113,7 @@ export default {
       }
     },
     helpFriend() {
+      console.log("没有触发吗");
       let user = JSON.parse(localStorage.getItem("userInfo"));
       const superior = this.getQueryVariable("superior");
       if (user.openid && superior) {
@@ -158,6 +171,18 @@ export default {
             }
           });
       }
+    },
+    isAttention(data) {
+      axios.post("/api/wx/attention", data).then(res => {
+        if (res.data.code !== "200") {
+          const superior = this.getQueryVariable("superior");
+          if (superior) {
+            this.$router.push("/attention?superior=" + superior);
+          } else {
+            this.$router.push("/attention");
+          }
+        }
+      });
     }
   },
   mounted() {
@@ -172,6 +197,7 @@ export default {
           })
           .then(res => {
             localStorage.setItem("userInfo", JSON.stringify(res.data));
+            this.isAttention(res.data);
             this.isFill();
             this.getSign();
             if (superior) {
@@ -186,6 +212,7 @@ export default {
         }
       }
     } else {
+      this.isAttention(JSON.parse(user));
       this.isFill();
       this.getSign();
       if (superior) {

@@ -24,12 +24,10 @@ router.post('/getWining', async (req, res) => {
         return false;
     }
     let ins = await prizeService.getPrize(req.body);
-    ins=false;
     if (!ins) {
         const card = await cardService.getCardList(req.body)
         if (card.successCard) {
             let prizes = await prizeService.getPrizeList();
-            prizes=false;
             if (!prizes) {
                 res.send({
                     code: '500',

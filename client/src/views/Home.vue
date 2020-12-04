@@ -11,7 +11,6 @@
             v-for="(ans, index) in item.answer"
             :key="index"
             :name="ans.value"
-            
           >{{ ans.name }}</van-radio>
         </van-radio-group>
       </template>
@@ -28,9 +27,12 @@
             shape="square"
           >{{ ans.name }}</van-checkbox>
         </van-checkbox-group>
-        <p class="extra">
-          <input type="text" v-model="answers[index].extra" placeholder="请输入其他原因" />
-        </p>
+        <template v-if="item.extra">
+          <p class="extra">
+            <input type="text" v-model="answers[index].extra" placeholder="请输入其他原因" />
+          </p>
+        </template>
+
         <!-- <van-field v-model="answers[index].extra" label-width="40px" placeholder="请输入其他原因"/> -->
       </template>
     </div>
@@ -54,56 +56,79 @@ export default {
         {
           title: "Q1、您觉得本地的社会治安状况如何?（单选）",
           value: "",
-          serial:1
+          serial: 1
         },
         {
           title: "Q2、您觉得本地的生产安全状况如何?（单选）",
           value: "",
-           serial:2
+          serial: 2
         },
         {
           title: "Q3、您觉得本地的食品药品安全吗?（单选）",
           value: "",
-           serial:3
+          serial: 3
         },
         {
           title: "Q4、您觉得本地的生态环境安全吗?（单选）",
           value: "",
-           serial:4
+          serial: 4
         },
         {
           title: "Q5、当前哪类问题最影响您的安全感？（多选）",
           value: [],
           extra: "",
-           serial:5
+          serial: 5
         },
         {
           title:
             "Q6、您或您的家人是否参与过平安创建活动？［比如：平安志愿者、平安红袖章、平安巡防、矛盾纠纷调解，平安宣传（包括制作、发放、张贴相关宣传资料，编排、演出相关文艺节目等），疫情防控，禁毒、禁赌、扫黄，消防演习、应急演练，主动报警、制止或向有关单位报告发生在身边的违法犯罪行为（如偷盗、抢劫、斗殴等事件）以及公共安全问题（如消防、交通、食品药品、市政设施等），平安爆料（通过微信或电话等）、填写平安建设有关问卷调查］(单选)",
           value: "",
-           serial:6
+          serial: 6
         },
         {
-          title: "Q7、对于电信网络诈骗，您知晓哪些类型？(多选)",
+          title:
+            "Q7、就骑车人而言，目前电动自行车交通安全风险主要表现在？(多选)",
           value: [],
           extra: "",
-           serial:7
+          serial: 7
         },
         {
-          title: "Q8、您知晓哪些措施可以防范电信网络诈骗？(多选)",
+          title: "Q8、下列维护电动车的行为，您知道吗？(多选)",
           value: [],
           extra: "",
-           serial:8
+          serial: 8
         },
         {
-          title: "Q9、您对本地政府开展的扫黑除恶专项斗争工作满意吗？(单选)",
+          title: "Q9、您对当地（指居住地本区/县/县级市）禁毒工作满意吗？",
           value: "",
-           serial:9
+          serial: 9
         },
         {
-          title: "Q10、您对本地政府开展的疫情防控工作满意吗？(单选)",
+          title: "Q10、你知道“国际禁毒日”是哪一天吗？",
           value: "",
-           serial:10
+          serial: 10
+        },
+        {
+          title: "Q11、对于电信网络诈骗，您知晓哪些类型？(多选)",
+          value: [],
+          extra: "",
+          serial: 11
+        },
+        {
+          title: "Q12、您知晓哪些措施可以防范电信网络诈骗？(多选)",
+          value: [],
+          extra: "",
+          serial: 12
+        },
+        {
+          title: "Q13、您对本地政府开展的扫黑除恶专项斗争工作满意吗？(单选)",
+          value: "",
+          serial: 13
+        },
+        {
+          title: "Q14、您对本地政府开展的疫情防控工作满意吗？(单选)",
+          value: "",
+          serial: 14
         }
       ],
       topicList: [
@@ -246,7 +271,106 @@ export default {
           ]
         },
         {
-          title: "Q7、对于电信网络诈骗，您知晓哪些类型？(多选)",
+          title:
+            "Q7.就骑车人而言，目前电动自行车交通安全风险主要表现在？(多选) ",
+          type: "checkbox",
+          answer: [
+            {
+              name: "无视交通规则(推荐选择)",
+              value: "无视交通规则"
+            },
+            {
+              name: "不戴安全头盔(推荐选择)",
+              value: "不戴安全头盔"
+            },
+            {
+              name: "带他人骑行(推荐选择)",
+              value: "带他人骑行"
+            },
+            {
+              name: "载货超大超重(推荐选择)",
+              value: "载货超大超重"
+            },
+            {
+              name: "没有经常检修车辆的习惯(推荐选择)",
+              value: "没有经常检修车辆的习惯"
+            },
+            {
+              name: "不知道",
+              value: "不知道"
+            }
+          ],
+          extra: false
+        },
+        {
+          title: "Q8.下列维护电动车的行为，您知道吗？",
+          type: "checkbox",
+          answer: [
+            {
+              name: "骑行前检查刹车距离(推荐选择)",
+              value: "骑行前检查刹车距离"
+            },
+            {
+              name: "定期检查轮胎的磨损程度(推荐选择)",
+              value: "定期检查轮胎的磨损程度"
+            },
+            {
+              name: "定期检查胎压(推荐选择)",
+              value: "定期检查胎压"
+            },
+            {
+              name: "都不知道",
+              value: "都不知道"
+            }
+          ],
+          extra: false
+        },
+        {
+          title: "Q9、您对当地（指居住地本区/县/县级市）禁毒工作满意吗？",
+          type: "radio",
+          answer: [
+            {
+              name: "很满意(推荐选择)",
+              value: "很满意"
+            },
+            {
+              name: "比较满意",
+              value: "比较满意"
+            },
+            {
+              name: "不满意",
+              value: "不满意"
+            },
+            {
+              name: "不清楚",
+              value: "不清楚"
+            }
+          ]
+        },
+        {
+          title: "Q10、你知道“国际禁毒日”是哪一天吗？",
+          type: "radio",
+          answer: [
+            {
+              name: "7月28日",
+              value: "7月28日"
+            },
+            {
+              name: "6月26日(推荐选择)",
+              value: "6月26日"
+            },
+            {
+              name: "3月15日",
+              value: "3月15日"
+            },
+            {
+              name: "5月17日",
+              value: "5月17日"
+            }
+          ]
+        },
+        {
+          title: "Q11、对于电信网络诈骗，您知晓哪些类型？(多选)",
           type: "checkbox",
           answer: [
             {
@@ -289,7 +413,7 @@ export default {
           extra: true
         },
         {
-          title: "Q8、您知晓哪些措施可以防范电信网络诈骗？(多选)",
+          title: "Q12、您知晓哪些措施可以防范电信网络诈骗？(多选)",
           type: "checkbox",
           answer: [
             {
@@ -320,7 +444,7 @@ export default {
           extra: true
         },
         {
-          title: "Q9、您对本地政府开展的扫黑除恶专项斗争工作满意吗？(单选)",
+          title: "Q13、您对本地政府开展的扫黑除恶专项斗争工作满意吗？(单选)",
           type: "radio",
           answer: [
             {
@@ -342,7 +466,7 @@ export default {
           ]
         },
         {
-          title: "Q10、您对本地政府开展的疫情防控工作满意吗？(单选)",
+          title: "Q14、您对本地政府开展的疫情防控工作满意吗？(单选)",
           type: "radio",
           answer: [
             {
@@ -388,7 +512,7 @@ export default {
           return false;
         }
       }
-      console.log(this.answers)
+      console.log(this.answers);
       axios
         .post("/api/question/add", {
           openid: openid,

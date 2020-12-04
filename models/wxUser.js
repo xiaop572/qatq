@@ -32,19 +32,23 @@ module.exports = sequelize.define(
             type: DataTypes.STRING,
             allowNull: false
         },
-        loginTime:{
-            type:DataTypes.STRING,
-            allowNull:false
+        answerTime: {
+            type: DataTypes.STRING,
+            allowNull: false
         },
-        smokeCardNumber:{
-            type:DataTypes.INTEGER,
-            allowNull:false,
-            defaultValue:0
+        loginTime: {
+            type: DataTypes.STRING,
+            allowNull: false
         },
-        fillArch:{
-            type:DataTypes.BOOLEAN,
-            allowNull:false,
-            defaultValue:false
+        smokeCardNumber: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 0
+        },
+        fillArch: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
         }
     }, {
         createdAt: false,
