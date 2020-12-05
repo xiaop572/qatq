@@ -86,18 +86,18 @@ export default {
           wx.ready(function() {
             //需在用户可能点击分享按钮前就先调用
             wx.updateAppMessageShareData({
-              title: "安全感调查问卷", // 分享标题
-              desc: "2020年鹿城区群众安全感调查问卷", // 分享描述
+              title: "我为平安藤桥代言，一起集“平安”卡赢大奖！", // 分享标题
+              desc: "快来为我助力集“平安卡”", // 分享描述
               link: "http://patq.lin526.cn/?superior=" + userData.openid, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-              imgUrl: "https://patq.lin526.cn/tqlogo.jpg", // 分享图标
+              imgUrl: "https://patq.lin526.cn/pingan.jpg", // 分享图标
               success: function() {
                 // 设置成功
               }
             });
             wx.updateTimelineShareData({
-              title: "安全感调查问卷", // 分享标题
+              title: "我为平安藤桥代言，一起集“平安”卡赢大奖！", // 分享标题
               link: "http://patq.lin526.cn/?superior=" + userData.openid, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-              imgUrl: "https://patq.lin526.cn/tqlogo.jpg", // 分享图标
+              imgUrl: "https://patq.lin526.cn/pingan.jpg", // 分享图标
               success: function() {
                 // 设置成功
               }
