@@ -34,7 +34,7 @@ module.exports = sequelize.define(
         },
         answerTime: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: true
         },
         loginTime: {
             type: DataTypes.STRING,

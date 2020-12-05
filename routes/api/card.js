@@ -62,7 +62,7 @@ router.post('/abstractCard', async (req, res) => {
         let num=Math.floor(Math.random() * length);
         ran = drawArr[num];
     } else {
-        ran = Math.ceil(Math.random() * 850 / 100);
+        ran = Math.ceil(Math.random() * 810 / 100);
     }
     await cardService.abstractCard(req.body, ran);
     res.send({
