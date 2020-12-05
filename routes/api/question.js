@@ -3,6 +3,7 @@ const router = express.Router();
 const request = require('request');
 const questionService = require('../../services/questionService')
 const wxUserService = require('../../services/wxUserService')
+const statisticsService = require('../../services/statisticsService')
 const moment = require('moment')
 router.post('/add', async (req, res) => {
     if (!req.body.openid) {
@@ -117,7 +118,7 @@ router.post('/get', async (req, res) => {
     const nowTime = moment().startOf('day').utc().format('X');
     console.log(nowTime)
     const ins = await wxUserService.getUser(req.body);
-    console.log(ins.answerTime , nowTime)
+    await statisticsService.addCount();
     if (!ins.answerTime || ins.answerTime < nowTime) {
         res.send({
             code: '200',

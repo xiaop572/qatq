@@ -3,7 +3,6 @@ const app = express();
 const cors = require("cors");
 const history = require("connect-history-api-fallback");
 const prize =require('../models/prize')
-
 app.use(history({
   rewrites: [{
     from: /^\/api\/.*$/,
