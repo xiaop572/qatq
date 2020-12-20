@@ -41,3 +41,14 @@ exports.updatePrizeInfo = async function (p,obj) {
     ins.save()
     return ins.toJSON()
 }
+exports.updatePrizeInfo2 = async function (p,obj) {
+    console.log(obj)
+    const ins = await prize.findOne({
+        where: {
+            id: p.id
+        }
+    })
+    ins.phone=obj.phone;
+    ins.save()
+    return ins.toJSON()
+}

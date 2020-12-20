@@ -50,19 +50,24 @@ router.post('/abstractCard', async (req, res) => {
         delete ins.successCard;
         for (let item in ins) {
             if (ins[item] === 0) {
-                for(let j=0;j<5;j++){
+                for (let j = 0; j < 5; j++) {
                     drawArr.push(i)
                 }
-            }else{
-                drawArr.push(i)
+            } else {
+                // drawArr.push(i)
             }
             i++;
         }
-        let length=drawArr.length;
-        let num=Math.floor(Math.random() * length);
+        let length = drawArr.length;
+        let num = Math.floor(Math.random() * length);
         ran = drawArr[num];
     } else {
-        ran = Math.ceil(Math.random() * 810 / 100);
+        ran = Math.ceil(Math.random() * 706 / 100);
+        if (ran > 700 && ran < 703) {
+            ran = 8;
+        } else if (ran > 703) {
+            ran = 9
+        }
     }
     await cardService.abstractCard(req.body, ran);
     res.send({

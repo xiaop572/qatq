@@ -10,13 +10,13 @@ const myCache = new NodeCache();
 const crypto = require('crypto');
 var url = require("url");
 var querystring = require("querystring");
+const tokenCache = new NodeCache();
 router.get('/login', async (req, res) => {
     var arg = url.parse(req.url).query;
 
     //将arg参数字符串反序列化为一个对象
     var params = querystring.parse(arg);
-    
-    console.log(params,"有吗")
+
     if (params.superior) {
         res.cookie('superior', params.superior)
     }
@@ -101,31 +101,42 @@ router.post('/getUserCount', async (req, res) => {
     })
 })
 router.post('/attention', async (req, res) => {
-    request.get({
-        url: "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + AppID + "&secret=" + AppSecret
-    }, async function (error, response, body) {
-        const data = JSON.parse(body)
+    if (!myCache.get('access_token')) {
         request.get({
-                url: "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + data.access_token + "&openid=" + req.body.openid + "&lang=zh_CN"
-            },
-            async function (error, response, body) {
-                const data = JSON.parse(body);
-                if (data.subscribe === 1) {
-                    res.send({
-                        code: '200',
-                        msg: "已关注公众号"
-                    })
-                    return false;
-                } else {
-                    res.send({
-                        code: '400',
-                        msg: "未关注公众号"
-                    })
-                    return false;
-                }
-            })
-    })
+            url: `https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${AppID}&secret=${AppSecret}`
+        }, async function (error, response, body) {
+            const obj = JSON.parse(body)
+            myCache.set('access_token', obj.access_token, 7200)
+            pan(req, res)
+        })
+    } else {
+        pan(req, res)
+    }
 })
+
+function pan(req, res) {
+    let access_token=myCache.get('access_token');
+    console.log(access_token,"都是缓存起来的呀")
+    request.get({
+            url: "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + access_token + "&openid=" + req.body.openid + "&lang=zh_CN"
+        },
+        async function (error, response, body) {
+            const data = JSON.parse(body);
+            if (data.subscribe === 1) {
+                res.send({
+                    code: '200',
+                    msg: "已关注公众号"
+                })
+                return false;
+            } else {
+                res.send({
+                    code: '400',
+                    msg: "未关注公众号"
+                })
+                return false;
+            }
+        })
+}
 router.post('/getWxSignature', async (req, res) => {
     let ticket;
     if (!req.body.url) {

@@ -75,4 +75,33 @@ router.post('/prizeInfomation', async (req, res) => {
         msg: "提交成功"
     })
 })
+router.post('/prizeInfomation2', async (req, res) => {
+    if (!req.body.openid) {
+        res.send({
+            code: '500',
+            msg: "参数出错"
+        })
+        return false;
+    }
+    const ins = await prizeService.getPrize(req.body)
+    if (!ins) {
+        res.send({
+            code: '500',
+            msg: "参数出错"
+        })
+        return false;
+    }
+    if (ins.name && ins.phone && ins.cardId) {
+        res.send({
+            code: '300',
+            msg: "信息已填写"
+        })
+        return false;
+    }
+    const inss =await prizeService.updatePrizeInfo2(ins, req.body)
+    res.send({
+        code: '200',
+        msg: "提交成功"
+    })
+})
 module.exports = router

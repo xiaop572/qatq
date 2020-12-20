@@ -55,14 +55,15 @@
       </template>
       <p class="person-count">
         当前参与人数
-        <span>{{ userCount }}</span>人
+        <span>{{ userCount+8345 }}</span>人
       </p>
     </div>
     <!-- <div class="noLuckyDraw">未集齐卡片无法抽奖</div> -->
     <div class="luckyDraw" v-if="successCard && gameState">已集满,12月20号开奖</div>
     <div class="luckyDraw" v-if="successCard && !gameState" @click="choujiang">立即开奖</div>
     <div class="noLuckyDraw" v-if="!successCard && gameState">未集齐卡片无法抽奖</div>
-    <div class="noLuckyDraw" v-if="!successCard && !gameState">活动已结束</div>
+    <!-- <div class="noLuckyDraw" v-if="!successCard && !gameState">活动已结束</div> -->
+    <div class="luckyDraw" v-if="!successCard && !gameState">未集齐卡片无法抽奖</div>
     <div class="getCard" v-if="getCardDis">
       <h2 class="get-card-caption">恭喜您获得一张卡片</h2>
       <div class="card">
@@ -93,13 +94,32 @@
         <template v-if="award.type==='code'">
           <h4>恭喜中奖</h4>
           <p>{{award.prizeName}}</p>
-          <div class="prozeCode">
-            <input ref="copyNode" :value="award.code" class="copyInput" />
-            <span class="copy" @click="execCommand">复制</span>
-          </div>
-          <div class="furl-card" @click="
+          <template v-if="!award.phone">
+            <van-form @submit="onSubmits">
+              <van-field
+                v-model="sanform.phone"
+                name="phone"
+                placeholder="手机号码"
+                type="number"
+                :rules="[{ required: true, message: '请填写手机号' }]"
+              />
+              <p class="notice">请务必填写正确手机号码，我们将于24小时内将话费充值至该号码账户，请注意查收。</p>
+              <van-button round block type="info" native-type="submit" class="furl-card">提交</van-button>
+            </van-form>
+          </template>
+          <template v-else>
+            <van-field
+              v-model="award.phone"
+              name="phone"
+              placeholder="手机号码"
+              type="number"
+              readonly
+            />
+            <p class="notice">请务必填写正确手机号码，我们将于24小时内将话费充值至该号码账户，请注意查收。</p>
+            <div class="furl-card" @click="
           DrawPrizeVis = false;
         ">确定</div>
+          </template>
         </template>
         <template v-if="award.type==='adress'">
           <h4>恭喜中奖</h4>
@@ -128,7 +148,7 @@
               />
               <p
                 class="notice"
-              >奖品领取地点：凭相关信息和中奖截图到地点：藤桥镇渔藤路288号藤桥镇社会矛盾纠纷调处化解中心1号窗口领取，联系电话：0577—55883780。</p>
+              >奖品领取地点：凭相关信息和中奖截图到地点：藤桥镇渔藤路288号藤桥镇社会矛盾纠纷调处化解中心1号窗口领取，联系电话：0577—55883780。 一、二等奖领取时间，统一通知。</p>
               <van-button round block type="info" native-type="submit" class="furl-card">提交</van-button>
             </van-form>
           </template>
@@ -144,7 +164,7 @@
             <van-field type="number" v-model="award.cardId" name="cardId" readonly />
             <p
               class="notice"
-            >奖品领取地点：凭相关信息和中奖截图到地点：藤桥镇渔藤路288号藤桥镇社会矛盾纠纷调处化解中心1号窗口领取，联系电话：0577—55883780。</p>
+            >奖品领取地点：凭相关信息和中奖截图到地点：藤桥镇渔藤路288号藤桥镇社会矛盾纠纷调处化解中心1号窗口领取，联系电话：0577—55883780。 一、二等奖领取时间，统一通知。</p>
             <div class="furl-card" @click="
           DrawPrizeVis = false;
         ">确定</div>
@@ -188,6 +208,9 @@ export default {
         name: "",
         phone: "",
         cardId: ""
+      },
+      sanform: {
+        phone: ""
       }
     };
   },
@@ -203,6 +226,31 @@ export default {
           axios
             .post("/api/wining/prizeInfomation", {
               ...this.form,
+              openid: userData.openid
+            })
+            .then(res => {
+              if (res.data.code === "200") {
+                this.DrawPrizeVis = false;
+                Dialog({ message: "提交成功" });
+              }
+            });
+        })
+        .catch(() => {
+          this.DrawPrizeVis = false;
+          Dialog({ message: "提交失败" });
+        });
+    },
+    onSubmits() {
+      let user = localStorage.getItem("userInfo");
+      const userData = JSON.parse(user);
+      Dialog.confirm({
+        title: "中奖信息",
+        message: "提交后不可修改,确认提交吗？"
+      })
+        .then(() => {
+          axios
+            .post("/api/wining/prizeInfomation2", {
+              ...this.sanform,
               openid: userData.openid
             })
             .then(res => {
@@ -238,7 +286,7 @@ export default {
         })
         .then(res => {
           if (res.data.code === "500") {
-            Dialog({ message: "系统出错 请联系0577—55883780" });
+            Dialog({ message: "感谢您参与藤桥平安建设" });
             return;
           }
           this.award = res.data.data.state;
@@ -247,13 +295,13 @@ export default {
     },
     //抽卡
     getCard() {
-      if (!this.gameState) {
-        Dialog.alert({
-          title: "集卡有礼",
-          message: "抽卡时间已结束!"
-        });
-        return;
-      }
+      // if (!this.gameState) {
+      //   Dialog.alert({
+      //     title: "集卡有礼",
+      //     message: "抽卡时间已结束!"
+      //   });
+      //   return;
+      // }
       let user = localStorage.getItem("userInfo");
       let src = "";
       const userData = JSON.parse(user);
@@ -446,6 +494,9 @@ export default {
     position: fixed;
     background: rgba(0, 0, 0, 0.6);
     top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
     left: 0;
     z-index: 20;
     overflow: hidden;
