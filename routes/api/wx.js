@@ -22,7 +22,7 @@ router.get('/login', async (req, res) => {
     }
 
     var routerPath = 'api/wx/get_wx_access_token';
-    var return_uri = 'http%3A%2F%2Fpatq.lin526.cn%2F' + routerPath;
+    var return_uri = 'http%3A%2F%2Flpc.natapp1.cc%2F' + routerPath;
     var scope = 'snsapi_userinfo';
     res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + AppID + '&redirect_uri=' + return_uri + '&response_type=code&scope=' + scope + '&state=STATE#wechat_redirect')
 })
@@ -54,9 +54,9 @@ router.get('/get_wx_access_token', function (req, res, next) {
                                 await cardSer.add(userinfo)
                             }
                             if (req.cookies.superior) {
-                                res.redirect(301, 'http://patq.lin526.cn/?openid=' + userinfo.openid + '&superior=' + req.cookies.superior);
+                                res.redirect(301, 'http://lpc.natapp1.cc/?openid=' + userinfo.openid + '&superior=' + req.cookies.superior);
                             } else {
-                                res.redirect(301, 'http://patq.lin526.cn/?openid=' + userinfo.openid);
+                                res.redirect(301, 'http://lpc.natapp1.cc/?openid=' + userinfo.openid);
                             }
 
                             res.end()

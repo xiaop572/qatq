@@ -31,6 +31,10 @@ module.exports = sequelize.define(
         type:{
             type: DataTypes.STRING,
             allowNull: true
+        },
+        situa:{
+            type: DataTypes.STRING,
+            allowNull: true
         }
     }, {
         createdAt: false,

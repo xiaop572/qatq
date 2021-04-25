@@ -5,6 +5,7 @@ exports.getPrizeList = async function () {
             openid: null
         }
     })
+    console.log(ins)
     if (!ins || ins.length == 0) return false;
     return ins
 }

@@ -295,13 +295,13 @@ export default {
     },
     //抽卡
     getCard() {
-      // if (!this.gameState) {
-      //   Dialog.alert({
-      //     title: "集卡有礼",
-      //     message: "抽卡时间已结束!"
-      //   });
-      //   return;
-      // }
+      if (!this.gameState) {
+        Dialog.alert({
+          title: "集卡有礼",
+          message: "抽卡时间已结束!"
+        });
+        return;
+      }
       let user = localStorage.getItem("userInfo");
       let src = "";
       const userData = JSON.parse(user);
@@ -453,7 +453,7 @@ export default {
     }
   },
   mounted() {
-    var t1 = "2020/12/20 0:00";
+    var t1 = "2020/12/20 00:00";
     this.timer = setInterval(() => {
       this.time.d = this.cd(t1, new Date(), "d");
       this.time.h = this.cd(t1, new Date(), "h");

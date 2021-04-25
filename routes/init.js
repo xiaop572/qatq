@@ -2,7 +2,18 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const history = require("connect-history-api-fallback");
-const prize =require('../models/prize')
+const prize = require('../models/prize')
+const {
+  Op
+} = require('sequelize')
+console.log(Op)
+// prize.update({
+//   situa: 2
+// }, {
+//   where: {
+//     situa: "1"
+//   }
+// })
 app.use(history({
   rewrites: [{
     from: /^\/api\/.*$/,
