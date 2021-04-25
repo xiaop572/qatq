@@ -142,7 +142,7 @@ export default {
       }
     },
     isHelp() {
-      console.log("哈哈")
+      console.log("哈哈哈哈哈")
       const superior = this.getQueryVariable("superior");
       if (superior) {
         let user = localStorage.getItem("userInfo");
