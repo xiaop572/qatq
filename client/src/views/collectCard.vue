@@ -468,7 +468,7 @@ export default {
     }
   },
   mounted() {
-    var t1 = "2021/07/04 0:00";
+    var t1 = "2021/07/31 0:00";
     this.timer = setInterval(() => {
       this.time.d = this.cd(t1, new Date(), "d");
       this.time.h = this.cd(t1, new Date(), "h");
