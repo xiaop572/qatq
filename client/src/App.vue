@@ -86,18 +86,18 @@ export default {
           wx.ready(function() {
             //需在用户可能点击分享按钮前就先调用
             wx.updateAppMessageShareData({
-              title: "我为平安藤桥代言，一起集“平安”卡赢大奖！", // 分享标题
+              title: "藤桥镇派送“平安福利”啦！", // 分享标题
               desc: "快来为我助力集“平安卡”", // 分享描述
-              link: "http://patq.lin526.cn/?superior=" + userData.openid, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-              imgUrl: "https://patq.lin526.cn/pingan.jpg", // 分享图标
+              link: "http://pa.lin526.cn/?superior=" + userData.openid, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+              imgUrl: "http://pa.lin526.cn/pingan.jpg", // 分享图标
               success: function() {
                 // 设置成功
               }
             });
             wx.updateTimelineShareData({
-              title: "我为平安藤桥代言，一起集“平安”卡赢大奖！", // 分享标题
-              link: "http://patq.lin526.cn/?superior=" + userData.openid, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-              imgUrl: "https://patq.lin526.cn/pingan.jpg", // 分享图标
+              title: "藤桥镇派送“平安福利”啦！", // 分享标题
+              link: "http://pa.lin526.cn/?superior=" + userData.openid, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+              imgUrl: "http://pa.lin526.cn/pingan.jpg", // 分享图标
               success: function() {
                 // 设置成功
               }

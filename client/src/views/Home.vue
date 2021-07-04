@@ -1,8 +1,8 @@
 <template>
   <div class="home">
-    <img src="../assets/topCity.png" alt class="topCity" />
-    <img src="../assets/wenCaption.png" alt class="wenCaption" />
-    <p class="hint">请您根据参与活动的真实感受，回答下面的问题</p>
+    <img src="../assets/wenjuanTou.png" alt class="topCity" />
+    <!-- <img src="../assets/wenCaption1.png" alt class="wenCaption" /> -->
+    <p class="hint">平安是福，平安是金，平安是你我的共同期盼，藤桥平安建设需要你的参与，接种疫苗就是参与藤桥平安建设。藤桥镇干部、网格员们甘当人民的忠诚卫士，披星戴月、乘风破浪，社会治安、道路交通、生产安全、火灾等各类案事件持续下降，民富民安齐头并进。接下来，全镇必定赓续奋斗，建设更高水平的平安藤桥！</p>
     <div class="topic-box" v-for="(item, index) in topicList" :key="index">
       <h4 class="topic-title">{{ item.title }}</h4>
       <template v-if="item.type === 'radio'">
@@ -79,14 +79,12 @@ export default {
           serial: 5
         },
         {
-          title:
-            "Q6、 您觉得本地的消防安全状况如何?（单选）",
+          title: "Q6、 您觉得本地的消防安全状况如何?（单选）",
           value: "",
           serial: 6
         },
         {
-          title:
-            "Q7、请问您关注的前三位社会安全问题是?（选三项）",
+          title: "Q7、请问您关注的前三位社会安全问题是?",
           value: [],
           serial: 7
         },
@@ -109,7 +107,8 @@ export default {
           serial: 10
         },
         {
-          title: "Q11、您觉得本地区新冠肺炎疫情防控工作是否到位，存在哪些问题？(多选)",
+          title:
+            "Q11、您觉得本地区新冠肺炎疫情防控工作是否到位，存在哪些问题？(多选)",
           value: [],
           extra: "",
           serial: 11
@@ -254,10 +253,13 @@ export default {
           ]
         },
         {
-          title:
-            "Q7.请问您关注的前三位社会安全问题是？（选三项）",
+          title: "Q7.请问您关注的前三位社会安全问题是？",
           type: "checkbox",
           answer: [
+            {
+              name: "无(推荐选择)",
+              value: "无"
+            },
             {
               name: "社会治安",
               value: "社会治安"
@@ -289,7 +291,7 @@ export default {
             {
               name: "公共卫生安全(含医疗事故、疫情等)",
               value: "公共卫生安全(含医疗事故、疫情等)"
-            },
+            }
           ],
           extra: false
         },
@@ -302,20 +304,27 @@ export default {
               value: "没有参加"
             },
             {
-              name: "参与过疫情防控、矛盾纠纷调解、平安巡防、安全检查、维持公共秩序等志愿活动",
-              value: "参与过疫情防控、矛盾纠纷调解、平安巡防、安全检查、维持公共秩序等志愿活动"
+              name:
+                "参与过疫情防控、矛盾纠纷调解、平安巡防、安全检查、维持公共秩序等志愿活动(推荐选择)",
+              value:
+                "参与过疫情防控、矛盾纠纷调解、平安巡防、安全检查、维持公共秩序等志愿活动"
             },
             {
-              name: "参与过平安宣传资料发放、编排演出相关文艺节目、平安建设问卷调查等",
-              value: "参与过平安宣传资料发放、编排演出相关文艺节目、平安建设问卷调查等"
+              name:
+                "参与过平安宣传资料发放、编排演出相关文艺节目、平安建设问卷调查等(推荐选择)",
+              value:
+                "参与过平安宣传资料发放、编排演出相关文艺节目、平安建设问卷调查等"
             },
             {
-              name: "参与过禁毒、禁赌、扫黄  □参与过消防演习、应急演练",
+              name:
+                "参与过禁毒、禁赌、扫黄  □参与过消防演习、应急演练(推荐选择)",
               value: "参与过禁毒、禁赌、扫黄  □参与过消防演习、应急演练"
             },
             {
-              name: "制止或报告违法犯罪行为及公共安全问题（如消防、交通、食品药品、生态环境、市政设施安全等）",
-              value: "制止或报告违法犯罪行为及公共安全问题（如消防、交通、食品药品、生态环境、市政设施安全等）"
+              name:
+                "制止或报告违法犯罪行为及公共安全问题（如消防、交通、食品药品、生态环境、市政设施安全等）(推荐选择)",
+              value:
+                "制止或报告违法犯罪行为及公共安全问题（如消防、交通、食品药品、生态环境、市政设施安全等）"
             }
           ],
           extra: true
@@ -329,35 +338,35 @@ export default {
               value: "不知道"
             },
             {
-              name: "公检法电话要求转账",
+              name: "公检法电话要求转账(推荐选择)",
               value: "公检法电话要求转账"
             },
             {
-              name: "网上兼职刷单",
+              name: "网上兼职刷单(推荐选择)",
               value: "网上兼职刷单"
             },
             {
-              name: "直播间炒股",
+              name: "直播间炒股(推荐选择)",
               value: "直播间炒股"
             },
             {
-              name: "网络贷款",
+              name: "网络贷款(推荐选择)",
               value: "网络贷款"
             },
             {
-              name: "网络赌博",
+              name: "网络赌博(推荐选择)",
               value: "网络赌博"
             },
             {
-              name: "交友婚恋为由参与虚拟货币投资",
+              name: "交友婚恋为由参与虚拟货币投资(推荐选择)",
               value: "交友婚恋为由参与虚拟货币投资"
             },
             {
-              name: "退款退费退税，要求先付保证金",
+              name: "退款退费退税，要求先付保证金(推荐选择)",
               value: "退款退费退税，要求先付保证金"
             },
             {
-              name: '"杀猪盘"诈骗',
+              name: '"杀猪盘"诈骗(推荐选择)',
               value: '"杀猪盘"诈骗'
             }
           ],
@@ -372,34 +381,35 @@ export default {
               value: "不知道"
             },
             {
-              name: "不轻信未经核实的经济利益诱惑",
+              name: "不轻信未经核实的经济利益诱惑(推荐选择)",
               value: "不轻信未经核实的经济利益诱惑"
             },
             {
-              name: "不轻信未经核实的网络交友",
+              name: "不轻信未经核实的网络交友(推荐选择)",
               value: "不轻信未经核实的网络交友"
             },
             {
-              name: "不透露个人隐私信息",
+              name: "不透露个人隐私信息(推荐选择)",
               value: "不透露个人隐私信息"
             },
             {
-              name: "未经核实不转账",
+              name: "未经核实不转账(推荐选择)",
               value: "未经核实不转账"
             },
             {
-              name: '关注"温州防诈骗"公众号',
+              name: '关注"温州防诈骗"公众号(推荐选择)',
               value: '关注"温州防诈骗"公众号'
             }
           ],
           extra: true
         },
         {
-          title: "Q11、您觉得本地区新冠肺炎疫情防控工作是否到位，存在哪些问题？(多选)",
+          title:
+            "Q11、您觉得本地区新冠肺炎疫情防控工作是否到位，存在哪些问题？(多选)",
           type: "checkbox",
           answer: [
             {
-              name: "落实到位",
+              name: "落实到位(推荐选择)",
               value: "落实到位"
             },
             {
@@ -411,9 +421,11 @@ export default {
               value: "防疫知识宣传不够到位"
             },
             {
-              name: "统筹推进疫情防控和经济发展不够到位（没有处理好疫情防控和经济发展的关系）",
-              value: "统筹推进疫情防控和经济发展不够到位（没有处理好疫情防控和经济发展的关系）"
-            },
+              name:
+                "统筹推进疫情防控和经济发展不够到位（没有处理好疫情防控和经济发展的关系）",
+              value:
+                "统筹推进疫情防控和经济发展不够到位（没有处理好疫情防控和经济发展的关系）"
+            }
           ],
           extra: true
         },
@@ -493,7 +505,11 @@ export default {
     color: #666;
     font-size: 0.24rem;
     letter-spacing: 2px;
-    margin-bottom: 0.5rem;
+    width:7rem;
+    margin: 0.2rem auto 0.5rem auto;
+    line-height: 0.4rem;
+    text-indent: 2em;
+    text-align: left;
   }
 
   .extra {
@@ -525,7 +541,7 @@ export default {
     padding: 0.39rem 0.3rem;
     border-radius: 0.2rem;
     margin-bottom: 0.5rem;
-    text-align:left;
+    text-align: left;
     .topic-title {
       text-align: left;
       font-size: 0.28rem;

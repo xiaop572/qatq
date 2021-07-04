@@ -1,11 +1,11 @@
 <template>
   <div class="collectCard">
-    <img src="../assets/topCity.png" alt class="topCity" />
-    <img src="../assets/cardCaption.png" alt class="cardCaption" />
+    <img src="../assets/topCity1.png" alt class="topCity" />
+    <!-- <img src="../assets/cardCaption.png" alt class="cardCaption" /> -->
     <template v-if="successCard">
       <div class="rule">
         <img src="../assets/ruleBg.png" alt class="ruleBg" />
-        <p class="successP">感谢您参与藤桥平安建设,支持平安建设。</p>
+        <p class="successP">接种疫苗是实现全民免疫的国家战略，主动参与疫苗接种就是参与平安藤桥建设。</p>
       </div>
     </template>
     <template v-else>
@@ -19,7 +19,7 @@
       </div>
       <div class="rule">
         <!-- <img src="../assets/ruleBg.png" alt class="ruleBg" /> -->
-        <h4>活动规则:</h4>
+        <!-- <h4>活动规则:</h4>
         <p>1.实物奖品领奖需出示朋友圈转发信息并完成浙江反骗码登记（地区选择藤桥）,否则无法领奖。</p>
         <p>2.参与者每天有三次抽卡机会，分享好友，通过好友助力可获得抽卡机会</p>
         <p>集齐9张卡片可得“平安藤桥”卡，获得一次抽奖机会，人人有机会拿大奖。</p>
@@ -28,7 +28,26 @@
         <p>一等奖2名，奖品：小牛F050电动车。</p>
         <p>二等奖4名，奖品：价值约2000元华为平板电脑。</p>
         <p>三等奖20名，价值100元藤桥薰鸡产品。</p>
-        <p>四等奖200名，话费20元。</p >
+        <p>四等奖200名，话费20元。</p> -->
+        <h4>福利一：</h4>
+        <p>前往藤桥西都锦园（渔藤路340号）方舱接种点进行疫苗接种，可进行现场抽奖。</p>
+        <p>【奖品设置】</p>
+        <p>一等奖共计8份 小牛F050电动车</p>
+        <p>二等奖共计15份 价值约2000元华为平板电脑</p>
+        <p>三等奖共计80份 价值100元藤桥熏鸡产品</p>
+        <p>四等奖共计250份 价值20元话费</p>
+        <p>五等奖共计10000份 洗手液</p>
+        <p>参与必得10个口罩</p>
+        <h4>福利二：</h4>
+        <p>参与者每天有三次抽卡机会，通过好友助力可获得抽卡机会，集齐9张卡片可得“平安藤桥”卡，获得一次抽奖机会，人人有机会拿大奖。</p>
+        <p>【奖品设置】</p>
+        <p>一等奖共计2份 小牛F050电动车</p>
+        <p>二等奖共计5份 价值约2000元华为平板电脑</p>
+        <p>三等奖共计20份 价值100元藤桥熏鸡产品</p>
+        <p>四等奖共计250份 价值20元话费</p>
+        <h4>注意事项：</h4>
+        <p>1.实物奖品领奖需完成浙江反骗码登记（地区选择藤桥）,否则无法领奖。</p>
+        <p>2.政府机关工作人员不享受相关奖励。</p>
       </div>
     </template>
     <div class="gather-card-box">
@@ -103,7 +122,7 @@
                 type="number"
                 :rules="[{ required: true, message: '请填写手机号' }]"
               />
-              <p class="notice">请务必填写正确手机号码，我们将于24小时内将话费充值至该号码账户，请注意查收。</p>
+              <p class="notice">虚拟奖品（话费）将于活动结束一周内充值至登记手机号码，请确保正确填写手机号码，号码有误则不予兑奖。</p>
               <van-button round block type="info" native-type="submit" class="furl-card">提交</van-button>
             </van-form>
           </template>
@@ -115,7 +134,7 @@
               type="number"
               readonly
             />
-            <p class="notice">请务必填写正确手机号码，我们将于24小时内将话费充值至该号码账户，请注意查收。</p>
+            <p class="notice">虚拟奖品（话费）将于活动结束一周内充值至登记手机号码，请确保正确填写手机号码，号码有误则不予兑奖。</p>
             <div class="furl-card" @click="
           DrawPrizeVis = false;
         ">确定</div>
@@ -146,9 +165,7 @@
                 placeholder="身份证号码"
                 :rules="[{ required: true, message: '请填写身份证号码' }]"
               />
-              <p
-                class="notice"
-              >奖品领取地点：凭相关信息和中奖截图到地点：藤桥镇渔藤路288号藤桥镇社会矛盾纠纷调处化解中心1号窗口领取，联系电话：0577—55883780。 一、二等奖领取时间，统一通知。</p>
+              <p class="notice">实物奖品兑奖时间和兑奖地点将于活动结束后另行通知领取。</p>
               <van-button round block type="info" native-type="submit" class="furl-card">提交</van-button>
             </van-form>
           </template>
@@ -162,9 +179,7 @@
               readonly
             />
             <van-field type="number" v-model="award.cardId" name="cardId" readonly />
-            <p
-              class="notice"
-            >奖品领取地点：凭相关信息和中奖截图到地点：藤桥镇渔藤路288号藤桥镇社会矛盾纠纷调处化解中心1号窗口领取，联系电话：0577—55883780。 一、二等奖领取时间，统一通知。</p>
+            <p class="notice">实物奖品兑奖时间和兑奖地点将于活动结束后另行通知领取</p>
             <div class="furl-card" @click="
           DrawPrizeVis = false;
         ">确定</div>
@@ -453,7 +468,7 @@ export default {
     }
   },
   mounted() {
-    var t1 = "2020/12/20 0:00";
+    var t1 = "2021/07/04 0:00";
     this.timer = setInterval(() => {
       this.time.d = this.cd(t1, new Date(), "d");
       this.time.h = this.cd(t1, new Date(), "h");
@@ -607,15 +622,17 @@ export default {
   .rule {
     width: 7.16rem;
     min-height: 1.9rem;
-    background-color: #fffbd2;
+    // background-color: #fffbd2;
+    background-color: #fff;
     border-radius: 0.1rem;
     margin: auto;
     position: relative;
     text-align: left;
-    color: #ff7933;
+    // color: #ff7933;
+    color: #666;
     padding-bottom: 0.4rem;
     .successP {
-      font-size: 0.4rem;
+      font-size: 0.32rem;
       width: 4.6rem;
       position: absolute;
       top: 0;
@@ -654,7 +671,8 @@ export default {
 
   .gather-card-box {
     width: 7.16rem;
-    background: #fffbd2;
+    // background: #fffbd2;
+    background-color: #fff;
     border-radius: 0.1rem;
     margin: 0.42rem auto 0 auto;
     padding: 0 0.15rem 0.38rem 0.15rem;
@@ -868,8 +886,8 @@ export default {
       font-weight: bold;
     }
   }
-
-  background-color: #fbd8c8;
+  // background-color: #fbd8c8;
+  background-color: #0168b7;
   background-image: url("../assets/cardBg.png");
   background-repeat: no-repeat;
   background-size: 100% auto;

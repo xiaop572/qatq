@@ -119,6 +119,7 @@ router.post('/get', async (req, res) => {
     console.log(nowTime)
     const ins = await wxUserService.getUser(req.body);
     await statisticsService.addCount();
+    console.log(ins.answerTime,"时间");
     if (!ins.answerTime || ins.answerTime < nowTime) {
         res.send({
             code: '200',
