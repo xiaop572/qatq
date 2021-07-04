@@ -199,7 +199,7 @@ export default {
           })
           .then(res => {
             localStorage.setItem("userInfo", JSON.stringify(res.data));
-            this.isAttention(res.data);
+            // this.isAttention(res.data);//是否需要关注公众号
             this.isFill();
             this.getSign();
             if (superior) {
@@ -214,7 +214,7 @@ export default {
         }
       }
     } else {
-      this.isAttention(JSON.parse(user));
+      // this.isAttention(JSON.parse(user)); //是否需要关注公众号
       this.isFill();
       this.getSign();
       if (superior) {

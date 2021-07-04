@@ -31,6 +31,9 @@ app.use('/api/help', require('./api/help'));
 app.use('/api/wining', require('./api/wining'));
 app.use(require("./errorMiddleware"));
 const port = 22307;
+app.get('/api/state',(req,res)=>{
+  res.send("连接成功");
+})
 app.listen(port, () => {
   console.log(`server listen on ${port}`);
 });
